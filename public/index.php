@@ -1,3 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../bootstrap/app.php';
+define('BP', dirname(__DIR__));
+
+require_once BP . '/bootstrap/app.php';
