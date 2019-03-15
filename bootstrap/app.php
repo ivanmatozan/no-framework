@@ -8,3 +8,5 @@ try {
     \Dotenv\Dotenv::create(BP)->load();
 } catch (\Dotenv\Exception\InvalidPathException $e) {
 }
+
+require_once 'container.php';
