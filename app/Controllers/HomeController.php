@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use App\Views\View;
 
 /**
  * Class HomeController
@@ -12,11 +13,27 @@ use Psr\Http\Message\ResponseInterface;
 class HomeController
 {
     /**
+     * @var View
+     */
+    protected $view;
+
+    /**
+     * HomeController constructor.
+     * @param View $view
+     */
+    public function __construct(View $view)
+    {
+        $this->view = $view;
+    }
+
+    /**
      * @param RequestInterface $request
      * @return ResponseInterface
      */
     public function index(RequestInterface $request): ResponseInterface
     {
-        return new \Zend\Diactoros\Response\HtmlResponse('Test');
+        return $this->view->render('home.twig', [
+            'name' => 'Ivan'
+        ]);
     }
 }

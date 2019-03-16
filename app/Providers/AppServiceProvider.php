@@ -5,6 +5,7 @@ namespace App\Providers;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Route\Router;
 use League\Route\Strategy\ApplicationStrategy;
+use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
@@ -21,14 +22,14 @@ class AppServiceProvider extends AbstractServiceProvider
     protected $provides = [
         Router::class,
         'request',
-        'response',
+        ResponseInterface::class,
         'emitter'
     ];
 
     /**
      * @inheritDoc
      */
-    public function register()
+    public function register(): void
     {
         /** @var \League\Container\Container $container */
         $container = $this->getContainer();
@@ -44,7 +45,7 @@ class AppServiceProvider extends AbstractServiceProvider
             return ServerRequestFactory::fromGlobals();
         });
 
-        $container->share('response', Response::class);
+        $container->share(ResponseInterface::class, Response::class);
 
         $container->share('emitter', SapiEmitter::class);
     }
