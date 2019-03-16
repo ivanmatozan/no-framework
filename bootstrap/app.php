@@ -10,3 +10,10 @@ try {
 }
 
 require_once 'container.php';
+
+/** @var \League\Route\Router $router */
+$router = $container->get(\League\Route\Router::class);
+
+require_once BP . '/routes/web.php';
+
+$response = $router->dispatch($container->get('request'));
