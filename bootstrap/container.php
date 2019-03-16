@@ -6,3 +6,4 @@ $container->delegate(new \League\Container\ReflectionContainer());
 
 $container->addServiceProvider(\App\Providers\AppServiceProvider::class);
 $container->addServiceProvider(\App\Providers\ViewServiceProvider::class);
+$container->addServiceProvider(\App\Providers\ConfigServiceProvider::class);
