@@ -6,6 +6,7 @@ use League\Container\ServiceProvider\AbstractServiceProvider;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use App\Views\View;
 
 /**
@@ -28,12 +29,20 @@ class ViewServiceProvider extends AbstractServiceProvider
     {
         /** @var \League\Container\Container $container */
         $container = $this->getContainer();
+        /** @var \App\Config\Config $config */
+        $config = $container->get('config');
 
-        $container->share(View::class, function () use ($container) {
+        $container->share(View::class, function () use ($container, $config) {
             $loader = new FilesystemLoader(BP . '/views');
+
             $twig = new Environment($loader, [
-                'cache' => false
+                'cache' => $config->get('cache.views.path'),
+                'debug' => $config->get('app.debug')
             ]);
+
+            if ($config->get('app.debug')) {
+                $twig->addExtension(new DebugExtension());
+            }
 
             return new View($twig, $container->get(ResponseInterface::class));
         });
