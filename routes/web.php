@@ -1,5 +1,5 @@
 <?php
 
-$router->get('/', function ($request) {
-    return new \Zend\Diactoros\Response\HtmlResponse('Test');
-});
+use App\Controllers\HomeController;
+
+$router->get('/', [HomeController::class, 'index'])->setName('home');
