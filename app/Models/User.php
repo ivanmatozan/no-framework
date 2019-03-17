@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="user")
  */
-class User
+class User extends Base
 {
     /**
      * @ORM\Id()
@@ -44,14 +44,14 @@ class User
     /**
      * @ORM\Column(name="remember_token")
      *
-     * @var string
+     * @var string|null
      */
     protected $rememberToken;
 
     /**
      * @ORM\Column(name="remember_identifier")
      *
-     * @var string
+     * @var string|null
      */
     protected $rememberIdentifier;
 }

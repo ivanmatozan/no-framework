@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use App\Views\View;
@@ -18,12 +19,19 @@ class HomeController
     protected $view;
 
     /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
      * HomeController constructor.
      * @param View $view
+     * @param EntityManager $em
      */
-    public function __construct(View $view)
+    public function __construct(View $view, EntityManager $em)
     {
         $this->view = $view;
+        $this->em = $em;
     }
 
     /**
@@ -32,8 +40,10 @@ class HomeController
      */
     public function index(RequestInterface $request): ResponseInterface
     {
+        $user = $this->em->getRepository(\App\Models\User::class)->find(1);
+
         return $this->view->render('home.twig', [
-            'name' => 'Ivan'
+            'user' => $user
         ]);
     }
 }
