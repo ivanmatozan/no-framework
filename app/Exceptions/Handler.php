@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Session\SessionInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
@@ -14,12 +15,19 @@ class Handler
     protected $exception;
 
     /**
+     * @var SessionInterface
+     */
+    protected $session;
+
+    /**
      * Handler constructor.
      * @param Exception $exception
+     * @param SessionInterface $session
      */
-    public function __construct(Exception $exception)
+    public function __construct(Exception $exception, SessionInterface $session)
     {
         $this->exception = $exception;
+        $this->session = $session;
     }
 
     /**
@@ -55,6 +63,11 @@ class Handler
      */
     protected function handleValidationException(ValidationException $exception): ResponseInterface
     {
+        $this->session->setMultiple([
+            'errors' => $exception->getErrors(),
+            'old' => $exception->getOldInput()
+        ]);
+
         return redirect($exception->getPath());
     }
 }

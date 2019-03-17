@@ -14,7 +14,7 @@ abstract class Controller
      * @return array|object|null
      * @throws ValidationException
      */
-    public function validate(ServerRequestInterface $request, array $rules)
+    protected function validate(ServerRequestInterface $request, array $rules)
     {
         $validator = new Validator($request->getParsedBody());
         $validator->mapFieldsRules($rules);

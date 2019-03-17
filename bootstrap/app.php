@@ -19,7 +19,11 @@ require_once BP . '/routes/web.php';
 
 try {
     $response = $router->dispatch($container->get('request'));
-} catch (\Exception $e) {
-    $handler = new \App\Exceptions\Handler($e);
+} catch (\Exception $exception) {
+    $handler = new \App\Exceptions\Handler(
+        $exception,
+        $container->get(\App\Session\SessionInterface::class)
+    );
+
     $response = $handler->respond();
 }
