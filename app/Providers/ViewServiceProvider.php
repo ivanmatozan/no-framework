@@ -9,6 +9,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use App\Views\View;
+use App\Views\Extensions\ConfigExtension;
 use App\Views\Extensions\PathExtension;
 
 /**
@@ -46,6 +47,7 @@ class ViewServiceProvider extends AbstractServiceProvider
                 $twig->addExtension(new DebugExtension());
             }
 
+            $twig->addExtension(new ConfigExtension($config));
             $twig->addExtension(new PathExtension($container->get(Router::class)));
 
             return new View($twig, $container->get(ResponseInterface::class));
