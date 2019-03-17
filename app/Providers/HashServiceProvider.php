@@ -3,16 +3,16 @@
 namespace App\Providers;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
-use App\Session\SessionInterface;
-use App\Session\Session;
+use App\Auth\Hashing\HasherInterface;
+use App\Auth\Hashing\BcryptHasher;
 
-class SessionServiceProvider extends AbstractServiceProvider
+class HashServiceProvider extends AbstractServiceProvider
 {
     /**
      * @var array
      */
     protected $provides = [
-        SessionInterface::class
+        HasherInterface::class
     ];
 
     /**
@@ -23,6 +23,6 @@ class SessionServiceProvider extends AbstractServiceProvider
         /** @var \League\Container\Container $container */
         $container = $this->getContainer();
 
-        $container->share(SessionInterface::class, Session::class);
+        $container->share(HasherInterface::class, BcryptHasher::class);
     }
 }

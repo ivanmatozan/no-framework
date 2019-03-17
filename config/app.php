@@ -9,5 +9,6 @@ return [
         \App\Providers\ViewServiceProvider::class,
         \App\Providers\DatabaseServiceProvider::class,
         \App\Providers\SessionServiceProvider::class,
+        \App\Providers\HashServiceProvider::class
     ]
 ];
