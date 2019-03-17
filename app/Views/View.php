@@ -42,7 +42,7 @@ class View
         try {
             $body = $this->twig->render($template, $data);
         } catch (\Twig\Error\Error $e) {
-            $body = 'Error';
+            $body = $e->getMessage();
         }
 
         $this->response->getBody()->write($body);

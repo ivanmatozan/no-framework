@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Auth;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use App\Views\View;
 
-/**
- * Class HomeController
- * @package App\Controllers
- */
-class HomeController
+class LoginController
 {
     /**
      * @var View
@@ -32,6 +28,6 @@ class HomeController
      */
     public function index(RequestInterface $request): ResponseInterface
     {
-        return $this->view->render('home.twig');
+        return $this->view->render('auth/login.twig');
     }
 }
