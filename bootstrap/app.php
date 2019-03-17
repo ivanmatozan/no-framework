@@ -17,4 +17,9 @@ $router = $container->get(\League\Route\Router::class);
 
 require_once BP . '/routes/web.php';
 
-$response = $router->dispatch($container->get('request'));
+try {
+    $response = $router->dispatch($container->get('request'));
+} catch (\Exception $e) {
+    $handler = new \App\Exceptions\Handler($e);
+    $response = $handler->respond();
+}

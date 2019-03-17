@@ -3,10 +3,12 @@
 namespace App\Controllers\Auth;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use App\Controllers\Controller;
 use App\Views\View;
 
-class LoginController
+class LoginController extends Controller
 {
     /**
      * @var View
@@ -29,5 +31,20 @@ class LoginController
     public function index(RequestInterface $request): ResponseInterface
     {
         return $this->view->render('auth/login.twig');
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws \App\Exceptions\ValidationException
+     */
+    public function login(ServerRequestInterface $request): ResponseInterface
+    {
+        $this->validate($request, [
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        return redirect('/');
     }
 }

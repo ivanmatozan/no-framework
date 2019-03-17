@@ -26,3 +26,10 @@ if (!function_exists('env')) {
         }
     }
 }
+
+if (!function_exists('redirect')) {
+    function redirect(string $path): \Psr\Http\Message\ResponseInterface
+    {
+        return new \Zend\Diactoros\Response\RedirectResponse($path);
+    }
+}
