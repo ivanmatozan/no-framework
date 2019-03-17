@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use Psr\Http\Message\ResponseInterface;
+use League\Route\Router;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use App\Views\View;
+use App\Views\Extensions\PathExtension;
 
 /**
  * Class ViewServiceProvider
@@ -43,6 +45,8 @@ class ViewServiceProvider extends AbstractServiceProvider
             if ($config->get('app.debug')) {
                 $twig->addExtension(new DebugExtension());
             }
+
+            $twig->addExtension(new PathExtension($container->get(Router::class)));
 
             return new View($twig, $container->get(ResponseInterface::class));
         });
