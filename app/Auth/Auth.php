@@ -9,6 +9,8 @@ use App\Session\SessionInterface;
 
 class Auth
 {
+    protected const USER_ID = 'user_id';
+
     /**
      * @var EntityManager 
      */
@@ -25,6 +27,11 @@ class Auth
     protected $session;
 
     /**
+     * @var User
+     */
+    protected $user;
+
+    /**
      * Auth constructor.
      * @param EntityManager $em
      * @param HasherInterface $hash
@@ -38,6 +45,15 @@ class Auth
         $this->em = $em;
         $this->hash = $hash;
         $this->session = $session;
+        $this->init();
+    }
+
+    protected function init(): void
+    {
+        if ($this->session->exists(self::USER_ID)) {
+            $user = $this->getById($this->session->get(self::USER_ID));
+            $user ? $this->user = $user : $this->logout();
+        }
     }
 
     /**
@@ -53,8 +69,41 @@ class Auth
             return false;
         }
 
-        $this->session->set('user_id', $user->id);
+        $this->session->set(self::USER_ID, $user->id);
+        $this->user = $user;
+
         return true;
+    }
+
+    public function logout()
+    {
+        //
+    }
+
+    /**
+     * @return bool
+     */
+    public function check(): bool
+    {
+        return isset($this->user);
+    }
+
+    /**
+     * @return User
+     */
+    public function user(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @param string $password
+     * @return bool
+     */
+    protected function hasValidCredentials(User $user, string $password): bool
+    {
+        return $this->hash->check($password, $user->password);
     }
 
     /**
@@ -69,12 +118,11 @@ class Auth
     }
 
     /**
-     * @param User $user
-     * @param string $password
-     * @return bool
+     * @param int $id
+     * @return User|null
      */
-    protected function hasValidCredentials(User $user, string $password): bool
+    protected function getById(int $id): ?User
     {
-        return $this->hash->check($password, $user->password);
+        return $this->em->getRepository(User::class)->find($id);
     }
 }
