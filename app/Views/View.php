@@ -48,4 +48,14 @@ class View
         $this->response->getBody()->write($body);
         return $this->response;
     }
+
+    /**
+     * @param array $data
+     */
+    public function share(array $data): void
+    {
+        foreach ($data as $key => $value) {
+            $this->twig->addGlobal($key, $value);
+        }
+    }
 }

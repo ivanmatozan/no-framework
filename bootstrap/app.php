@@ -15,6 +15,7 @@ require_once 'container.php';
 /** @var \League\Route\Router $router */
 $router = $container->get(\League\Route\Router::class);
 
+require_once BP . '/bootstrap/middleware.php';
 require_once BP . '/routes/web.php';
 
 try {

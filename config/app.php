@@ -11,5 +11,10 @@ return [
         \App\Providers\SessionServiceProvider::class,
         \App\Providers\HashServiceProvider::class,
         \App\Providers\AuthServiceProvider::class
+    ],
+
+    'middleware' => [
+        \App\Middleware\ShareValidationErrors::class,
+        \App\Middleware\ClearValidationErrors::class
     ]
 ];
