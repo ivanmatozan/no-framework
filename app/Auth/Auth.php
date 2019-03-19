@@ -69,7 +69,11 @@ class Auth
             return false;
         }
 
-        $this->session->set(self::USER_ID, $user->id);
+        if ($this->needsRehash($user)) {
+            $this->rehashPassword($user, $password);
+        }
+
+        $this->session->set(self::USER_ID, $user->getId());
         $this->user = $user;
 
         return true;
@@ -103,7 +107,30 @@ class Auth
      */
     protected function hasValidCredentials(User $user, string $password): bool
     {
-        return $this->hash->check($password, $user->password);
+        return $this->hash->check($password, $user->getPassword());
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    protected function needsRehash(User $user): bool
+    {
+        return $this->hash->needsRehash($user->getPassword());
+    }
+
+    /**
+     * @param User $user
+     * @param string $password
+     */
+    protected function rehashPassword(User $user, string $password): void
+    {
+        $user->setPassword($this->hash->create($password));
+
+        try {
+            $this->em->flush();
+        } catch (\Doctrine\ORM\ORMException $e) {
+        }
     }
 
     /**
