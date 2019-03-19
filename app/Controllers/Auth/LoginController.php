@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use App\Controllers\Controller;
 use App\Views\View;
 use App\Auth\Auth;
+use App\Session\Flash;
 
 class LoginController extends Controller
 {
@@ -28,19 +29,27 @@ class LoginController extends Controller
     protected $router;
 
     /**
+     * @var Flash
+     */
+    protected $flash;
+
+    /**
      * LoginController constructor.
      * @param View $view
      * @param Auth $auth
      * @param Router $router
+     * @param Flash $flash
      */
     public function __construct(
         View $view,
         Auth $auth,
-        Router $router
+        Router $router,
+        Flash $flash
     ) {
         $this->view = $view;
         $this->auth = $auth;
         $this->router = $router;
+        $this->flash = $flash;
     }
 
     /**
@@ -64,7 +73,10 @@ class LoginController extends Controller
             'password' => ['required']
         ]);
 
-        $this->auth->attempt($data['email'], $data['password']);
+        if (!$this->auth->attempt($data['email'], $data['password'])) {
+            $this->flash->now('error', 'Could not login with those details.');
+            return redirect($request->getUri()->getPath());
+        }
 
         return redirect($this->router->getNamedRoute('home')->getPath());
     }
